@@ -1,4 +1,4 @@
 from musicblog import app
 
-while '__main__' == '__name__':
+while __name__ == '__main__':
     app.run(debug=True, port=8000)
