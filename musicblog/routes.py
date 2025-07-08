@@ -39,4 +39,14 @@ def register():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('home'))
+        
+        flash('Login Unsuccessful. Please check username and password', 'danger')
+     
+    return render_template('login.html', title='Login', form=form)
+
