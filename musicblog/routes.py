@@ -1,5 +1,5 @@
-from musicblog import app
 from flask import render_template, url_for, flash, redirect
+from musicblog import app
 from musicblog.forms import RegistrationForm, LoginForm
 
 
@@ -26,7 +26,7 @@ def home():
     return render_template('home.html', posts=posts)
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET','POST'])
 def register():
     form = RegistrationForm()
 
@@ -37,14 +37,14 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
 
     if form.validate_on_submit():
         if form.email.data == 'admin@blog.com' and form.password.data == 'password':
-            flash('You have been logged in!', 'success')
-            return redirect(url_for('home'))
+          flash('You have been logged in!', 'success')
+          return redirect(url_for('home'))
         
         flash('Login Unsuccessful. Please check username and password', 'danger')
      
