@@ -1,5 +1,6 @@
 from musicblog import app
-from flask import render_template, url_for
+from flask import render_template, url_for, flash, redirect
+from musicblog.forms import RegistrationForm, LoginForm
 
 
 posts = [
@@ -24,10 +25,18 @@ posts = [
 def home():
     return render_template('home.html', posts=posts)
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
 
 @app.route('/register')
 def register():
-    return render_template('register.html')
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        flash(f"Account created for {form.username.data}!", 'success')
+        return redirect(url_for('home'))
+    
+    return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
