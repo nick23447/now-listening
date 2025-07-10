@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect
 from musicblog import app, db, bcrypt
 from musicblog.forms import RegistrationForm, LoginForm
 from musicblog.models import User, Post
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 
 
 posts = [
@@ -48,7 +48,7 @@ def register():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-    if current_user.is_autheticated:
+    if current_user.is_authenticated:
         return redirect(url_for('home'))
     
     form = LoginForm()
@@ -63,3 +63,7 @@ def login():
      
     return render_template('login.html', title='Login', form=form)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
