@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect
 from musicblog import app, db, bcrypt
 from musicblog.forms import RegistrationForm, LoginForm
 from musicblog.models import User, Post
-from flask_login import login_user
+from flask_login import login_user, current_user
 
 
 posts = [
@@ -30,6 +30,9 @@ def home():
 
 @app.route('/register', methods=['GET','POST'])
 def register():
+    if current_user.is_autheticated:
+        return redirect(url_for('home'))
+    
     form = RegistrationForm()
 
     if form.validate_on_submit():
