@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect
 from musicblog import app, db, bcrypt
 from musicblog.forms import RegistrationForm, LoginForm
 from musicblog.models import User, Post
+from flask_login import login_user
 
 
 posts = [
@@ -38,6 +39,7 @@ def register():
         db.session.commit()
         flash(f"Your account has been created! You are now able to log in!", 'success')
         return redirect(url_for('login'))
+    
     return render_template('register.html', title='Register', form=form)
 
 
@@ -46,11 +48,12 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
-          flash('You have been logged in!', 'success')
-          return redirect(url_for('home'))
-        
-        flash('Login Unsuccessful. Please check username and password', 'danger')
+          user = User.query.filter_by(email=form.email.data).first()
+          if user and bcrypt.check_password_hash(user.password, form.password.data):
+              login_user(user, remember=form.remember.data)
+              return redirect(url_for('home'))
+
+          flash('Login Unsuccessful. Please check username and password', 'danger')
      
     return render_template('login.html', title='Login', form=form)
 
