@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from musicblog import app, db, bcrypt
-from musicblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from musicblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from musicblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -117,7 +117,11 @@ def account():
 	return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 
-@pp.route('/post/new')
+@app.route('/post/new', methods=['GET','POST'])
 @login_required
 def new_post():
-	return render_template('create_post.html', title='New Post')
+	form = PostForm()
+	if form.validate_on_submit():
+		flash('Your post has been created!', 'success')
+		return redirect(url_for('home.html'))
+	return render_template('create_post.html', title='New Post', form=form)
