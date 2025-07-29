@@ -80,12 +80,13 @@ def save_picture(form_picture):
 	f_name, f_ext = os.path.splitext(form_picture.filename)
 	picture_fn = random_hex + f_ext
 	picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+	form_picture.save(picture_path)
 
-	outpute_size = (125,125)
-	i = Image.open(form_picture)
-	i.thumbnail(outpute_size)
-	i.save(picture_path)
-    
+	# outpute_size = (125,125)
+	# i = Image.open(form_picture)
+	# i.thumbnail(outpute_size)
+	# i.save(picture_path)
+	
 	return picture_fn
 
 
@@ -114,3 +115,9 @@ def account():
 
 	image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 	return render_template('account.html', title='Account', image_file=image_file, form=form)
+
+
+@pp.route('/post/new')
+@login_required
+def new_post():
+	return render_template('create_post.html', title='New Post')
