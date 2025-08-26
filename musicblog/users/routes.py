@@ -8,7 +8,7 @@ from musicblog.users.utils import save_picture
 
 users = Blueprint('users', __name__)
 
-users.route('/register', methods=['GET','POST'])
+@users.route('/register', methods=['GET','POST'])
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('main.home'))
@@ -26,7 +26,7 @@ def register():
 	return render_template('register.html', title='Register', form=form)
 
 
-users.route('/login', methods=['GET','POST'])
+@users.route('/login', methods=['GET','POST'])
 def login():
 	if current_user.is_authenticated:
 		return redirect(url_for('main.home'))
@@ -45,13 +45,13 @@ def login():
 	return render_template('login.html', title='Login', form=form)
 
 
-users.route('/logout')
+@users.route('/logout')
 def logout():
 	logout_user()
 	return redirect(url_for('main.home'))
 
 
-users.route('/account', methods=['GET','POST'])
+@users.route('/account', methods=['GET','POST'])
 @login_required
 def account():
 	form = UpdateAccountForm()
