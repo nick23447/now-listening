@@ -3,6 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from musicblog import db, bcrypt
 from musicblog.models import User
 from musicblog.users.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from musicblog.users.utils import save_picture
 
 users = Blueprint('users', __name__)
 
