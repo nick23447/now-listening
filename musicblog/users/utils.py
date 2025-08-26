@@ -1,4 +1,6 @@
-
+import os
+import secrets
+from musicblog import app
 
 def save_picture(form_picture):
 	random_hex = secrets.token_hex(8)
