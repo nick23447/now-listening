@@ -1,8 +1,9 @@
-from flask import Blueprint
+from flask import render_template, url_for, flash, redirect, Blueprint
+from musicblog import db
+from musicblog.models import Post
+from musicblog.posts.forms import PostForm
 
 posts = Blueprint('posts', __name__)
-
-
 
 posts.route('/post/new', methods=['GET','POST'])
 @login_required
