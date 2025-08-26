@@ -1,4 +1,5 @@
 from flask import render_template, url_for, flash, redirect, Blueprint
+from flask_login import login_required
 from musicblog import db
 from musicblog.models import Post
 from musicblog.posts.forms import PostForm
@@ -14,5 +15,5 @@ def new_post():
 		db.session.add(post)
 		db.session.commit()
 		flash('Your post has been created!', 'success')
-		return redirect(url_for('home.html'))
+		return redirect(url_for('main.home'))
 	return render_template('create_post.html', title='New Post', form=form)
