@@ -1,6 +1,7 @@
+import os
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from musicblog import db, bcrypt
+from musicblog import db, bcrypt, app
 from musicblog.models import User
 from musicblog.users.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from musicblog.users.utils import save_picture
@@ -10,7 +11,7 @@ users = Blueprint('users', __name__)
 users.route('/register', methods=['GET','POST'])
 def register():
 	if current_user.is_authenticated:
-		return redirect(url_for('home'))
+		return redirect(url_for('main.home'))
     
 	form = RegistrationForm()
 
@@ -20,7 +21,7 @@ def register():
 		db.session.add(user)
 		db.session.commit()
 		flash(f"Your account has been created! You are now able to log in!", 'success')
-		return redirect(url_for('login'))
+		return redirect(url_for('users.login'))
     
 	return render_template('register.html', title='Register', form=form)
 
@@ -28,7 +29,7 @@ def register():
 users.route('/login', methods=['GET','POST'])
 def login():
 	if current_user.is_authenticated:
-		return redirect(url_for('home'))
+		return redirect(url_for('main.home'))
     
 	form = LoginForm()
 
@@ -47,7 +48,7 @@ def login():
 users.route('/logout')
 def logout():
 	logout_user()
-	return redirect(url_for('home'))
+	return redirect(url_for('main.home'))
 
 
 users.route('/account', methods=['GET','POST'])
@@ -67,7 +68,7 @@ def account():
 		current_user.email = form.email.data
 		db.session.commit()
 		flash('Your account has been updated!', 'success')
-		return redirect(url_for('account'))
+		return redirect(url_for('users.account'))
 		
 	elif request.method == 'GET':
 		form.username.data = current_user.username
