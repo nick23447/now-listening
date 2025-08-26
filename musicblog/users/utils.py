@@ -1,5 +1,6 @@
 import os
 import secrets
+from PIL import Image
 from musicblog import app
 
 def save_picture(form_picture):
