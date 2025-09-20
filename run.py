@@ -1,4 +1,6 @@
-from musicblog import app, db
+from musicblog import create_app, db
+
+app = create_app()
 
 if __name__ == '__main__':
     with app.app_context():
