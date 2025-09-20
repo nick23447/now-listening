@@ -1,7 +1,7 @@
 import os
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app
 from flask_login import login_user, current_user, logout_user, login_required
-from musicblog import db, bcrypt, app
+from musicblog import db, bcrypt
 from musicblog.models import User
 from musicblog.users.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from musicblog.users.utils import save_picture
@@ -61,7 +61,7 @@ def account():
 			picture_file = save_picture(form.picture.data)
 			current_user.image_file = picture_file
 			if old_pic != 'default.jpg':
-				os.remove(os.path.join(app.root_path, 'static/profile_pics', old_pic))
+				os.remove(os.path.join(current_app.root_path, 'static/profile_pics', old_pic))
 			current_user.image_file = picture_file
 
 		current_user.username = form.username.data
