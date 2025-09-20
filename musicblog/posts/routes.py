@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, Blueprint
-from flask_login import login_required
+from flask_login import login_required, current_user
 from musicblog import db
 from musicblog.models import Post
 from musicblog.posts.forms import PostForm
