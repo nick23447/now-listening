@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField
+from wtforms import StringField, TextAreaField, SubmitField, HiddenField
 from wtforms.validators import DataRequired
 
 
@@ -7,4 +7,6 @@ from wtforms.validators import DataRequired
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+    album_name = HiddenField('Album Name')
+    album_image = HiddenField('Album Image')
     submit = SubmitField('Post')
