@@ -23,9 +23,9 @@ class Post(db.Model):
     title = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
     content = db.Column(db.Text, nullable=False)
-    album_name = db.Column(db.String(100), nullable=True)
-    album_artist = db.Column(db.String(100), nullable=True)
-    album_image = db.Column(db.String(100), nullable=True)
+    album_name = db.Column(db.String(100), nullable=False)
+    album_artist = db.Column(db.String(100), nullable=False)
+    album_image = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
