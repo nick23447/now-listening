@@ -1,0 +1,42 @@
+#album-results {
+  position: absolute;
+  z-index: 1000;
+  width: 100%;            /* match input width */
+  max-height: 300px;       /* limit height */
+  overflow-y: auto;
+  display: none;
+  padding: 0;
+}
+
+/* Individual dropdown items */
+#album-results li {
+  white-space: nowrap;     /* prevent wrapping */
+  overflow: hidden;        /* clip long text */
+  text-overflow: ellipsis; /* show ... for long names */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Album image in dropdown */
+#album-results li img {
+  flex-shrink: 0;
+  width: 40px;  /* smaller thumbnail */
+  height: 40px;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+/* Optional: add max width to the dropdown itself */
+#album-results {
+  max-width: 400px;  /* adjust as needed */
+}
+
+#album-preview img {
+  max-width: 400px;  /* shrink image width */
+  height: auto;       /* keep aspect ratio */
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
