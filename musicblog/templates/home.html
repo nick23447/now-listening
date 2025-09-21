@@ -8,7 +8,14 @@
                     <small class="text-muted">{{ post.date_posted }}</small>
                 </div>
                 <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-                <p class="article-content">{{ post.content }}</p>
+                {% if post.album_image %}
+                    <img 
+                    src="{{ post.album_image }}" 
+                    alt="{{ post.album_name }}" 
+                    style="max-width:200px;" class="mb-2"
+                    ><p><strong>{{ post.album_name }}</strong> — {{ post.album_artist }}</p>
+                {% endif %}  
+                <p class="article-content">{{ post.album_name}}</p>
             </div>
         </article>
     {% endfor %}
