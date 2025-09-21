@@ -40,10 +40,10 @@ def new_post():
 	if form.validate_on_submit():
 		post = Post(
 			title=form.title.data, 
+			content=form.content.data, 
 			album_name=form.album_name.data, 
 			album_artist=form.album_artist.data,
 			album_image=form.album_image.data, 
-			content=form.content.data, 
 			author=current_user)
 		
 		db.session.add(post)
