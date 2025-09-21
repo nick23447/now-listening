@@ -1,4 +1,6 @@
-from flask import render_template, url_for, flash, redirect, Blueprint
+import os
+import requests
+from flask import render_template, url_for, flash, redirect, Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from musicblog import db
 from musicblog.models import Post
@@ -6,14 +8,47 @@ from musicblog.posts.forms import PostForm
 
 posts = Blueprint('posts', __name__)
 
+SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+
+def get_spotify_token():
+	auth_response = requests.post(
+        'https://accounts.spotify.com/api/token',
+        data={'grant_type': 'client_credentials'},
+        auth=(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
+    )
+	return auth_response.json().get("access_token")
+
+
+@posts.route('/search_album')
+def search_album():
+	query = request.args.get("q") 
+	token = get_spotify_token()   
+	headers = {"Authorization": f"Bearer {token}"} 
+
+	res = requests.get(
+        f"https://api.spotify.com/v1/search?q={query}&type=album&limit=5",
+        headers=headers
+    )
+    
+	return jsonify(res.json())
+
 @posts.route('/post/new', methods=['GET','POST'])
 @login_required
 def new_post():
 	form = PostForm()
 	if form.validate_on_submit():
-		post = Post(title=form.title.data, content=form.content.data, author=current_user)
+		post = Post(
+			title=form.title.data, 
+			album_name=form.content.data, 
+			album_image=form.content.data, 
+			ontent=form.content.data, 
+			author=current_user)
+		
 		db.session.add(post)
 		db.session.commit()
 		flash('Your post has been created!', 'success')
 		return redirect(url_for('main.home'))
 	return render_template('create_post.html', title='New Post', form=form)
+
+
