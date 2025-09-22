@@ -78,3 +78,27 @@ margin-bottom: 16px;
 .account-heading {
 font-size: 2.5rem;
 }
+
+
+/* <-- Post CSS --> */
+
+.media-body a:link {
+  color: green;
+  text-decoration: none;
+}
+
+.media-body a:visited {
+  color: #1D4561;
+  text-decoration: none;
+}
+
+.media-body a:hover {
+  color: lightblue;
+  text-decoration: underline;
+}
+
+.media-body a:active {
+  color: yellow;
+  text-decoration: underline;
+}
+
