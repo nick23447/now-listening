@@ -82,22 +82,22 @@ font-size: 2.5rem;
 
 /* <-- Post CSS --> */
 
-.media-body a:link {
+.content-section a:link {
   color: green;
   text-decoration: none;
 }
 
-.media-body a:visited {
+.content-section a:visited {
   color: #1D4561;
   text-decoration: none;
 }
 
-.media-body a:hover {
+.content-section a:hover {
   color: lightblue;
   text-decoration: underline;
 }
 
-.media-body a:active {
+.content-section a:active {
   color: yellow;
   text-decoration: underline;
 }
