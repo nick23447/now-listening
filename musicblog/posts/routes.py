@@ -24,10 +24,11 @@ def get_spotify_token():
 def search_album():
 	query = request.args.get("q") 
 	token = get_spotify_token()   
+	limit = request.args.get("limit", 20)
 	headers = {"Authorization": f"Bearer {token}"} 
 
 	res = requests.get(
-        f"https://api.spotify.com/v1/search?q={query}&type=album&limit=5",
+        f"https://api.spotify.com/v1/search?q={query}&type=album&limit={limit}",
         headers=headers
     )
     
