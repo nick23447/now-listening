@@ -1,42 +1,63 @@
+/* Album search dropdown */
 #album-results {
-  position: absolute;
-  z-index: 1000;
-  width: 100%;            /* match input width */
-  max-height: 300px;       /* limit height */
-  overflow-y: auto;
-  display: none;
-  padding: 0;
+    position: absolute;
+    z-index: 1000;
+    width: 100%; /* match input width */
+    max-height: 300px; /* limit height */
+    overflow-y: auto;
+    display: none;
+    padding: 0;
+    max-width: 400px; /* adjust as needed */
 }
 
 /* Individual dropdown items */
 #album-results li {
-  white-space: nowrap;     /* prevent wrapping */
-  overflow: hidden;        /* clip long text */
-  text-overflow: ellipsis; /* show ... for long names */
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
+    white-space: nowrap; /* prevent wrapping */
+    overflow: hidden; /* clip long text */
+    text-overflow: ellipsis; /* show ... for long names */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
 }
 
 /* Album image in dropdown */
 #album-results li img {
-  flex-shrink: 0;
-  width: 40px;  /* smaller thumbnail */
-  height: 40px;
-  object-fit: cover;
-  margin-right: 0.5rem;
+    flex-shrink: 0;
+    width: 40px; /* smaller thumbnail */
+    height: 40px;
+    object-fit: cover;
+    margin-right: 0.5rem;
 }
 
-/* Optional: add max width to the dropdown itself */
-#album-results {
-  max-width: 400px;  /* adjust as needed */
-}
-
+/* Album preview */
 #album-preview img {
-  max-width: 400px;  /* shrink image width */
-  height: auto;       /* keep aspect ratio */
-  display: block;
-  margin-bottom: 0.5rem;
+    max-width: 400px; /* shrink image width */
+    height: auto; /* keep aspect ratio */
+    display: block;
+    margin-bottom: 0.5rem;
 }
 
+/* Fix for post layout alignment */
+.content-section .flex-shrink-0 {
+    width: 200px; /* Fixed width for album column */
+    flex-shrink: 0;
+}
+
+.content-section .flex-shrink-0 p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    word-wrap: break-word; /* Allow long album names to wrap */
+}
+
+.content-section .flex-shrink-0 img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover; /* Ensure consistent image sizing */
+}
+
+/* Ensure the content column takes remaining space */
+.content-section .flex-grow-1 {
+    min-width: 0; /* Prevent flex item from overflowing */
+}
