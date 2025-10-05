@@ -22,8 +22,6 @@ def create_app(config_class=Config):
     bcrypt.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
-    login_manager.init_app(app) 
-    login_manager.init_app(app)
 
     from musicblog.users.routes import users
     from musicblog.posts.routes import posts
