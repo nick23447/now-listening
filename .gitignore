@@ -1,0 +1,39 @@
+# virtualenv
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*.so
+
+# editor / OS
+.DS_Store
+.vscode/
+
+# local sqlite db
+instance/site.db
+
+# packaging / egg-info
+*.egg-info/
+dist/
+build/
+
+# pytest cache
+.pytest_cache/
+
+# compiled C extensions
+*.pyd
+
+# logs
+*.log
+
+# coverage
+.coverage
+htmlcov/
+
+# misc
+*.swp
+*~

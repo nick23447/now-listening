@@ -32,17 +32,18 @@ def init_database(test_app):
         # Clean up after test
         db.session.remove()
 
+@pytest.fixture(scope='function')
+def test_user(init_database):
+    """Create test user"""
+    user = UserFactory.create()
+    db.session.add(user)
+    db.session.commit()
+    return user
 
 @pytest.fixture(scope='function')
-def test_users(init_database, amount):
-    """Create test user/s"""
-    if amount == 1:
-        user = PostFactory.create()
-        db.session.add(user)
-        db.session.commit()
-        return user
-   
-    users = PostFactory.create_batch()
+def test_users(init_database):
+    """Create 3 test users"""
+    users = UserFactory.create_batch(3)
     for user in users:
         db.session.add(user)
 
@@ -50,5 +51,19 @@ def test_users(init_database, amount):
     return users
 
 @pytest.fixture(scope='function')
-def sample_posts(test_app, test_users):
-   ...
+def sample_post(test_user):
+    """Create post"""
+    post = PostFactory.create(author=test_user)
+    db.session.add(post)
+    db.session.commit()
+    return post
+    
+@pytest.fixture(scope='function')
+def sample_posts(test_users):
+    """Create 3 posts"""
+    posts = PostFactory.create_batch(3, test_users)
+    for post in posts:
+        db.session.add(post)
+    db.session.commit()
+    return posts
+
