@@ -34,7 +34,7 @@ def test_user_registration_with_existing_email(test_client):
     """Test user registration fails with existing email"""
     response = test_client.post('/register', 
         data={
-            'username': 'newuser',
+            'username': 'newuser1',
             'email': 'new@example.com',
             'password': 'password123',
             'confirm_password': 'password123'
@@ -44,6 +44,22 @@ def test_user_registration_with_existing_email(test_client):
 
     assert response.status_code == 200
     assert b'That email is taken. Please choose another.' in response.data
+    assert b'Register' in response.data
+
+def test_user_registration_with_existing_username(test_client):
+    """Test user registration fails with existing email"""
+    response = test_client.post('/register', 
+        data={
+            'username': 'newuser',
+            'email': 'newtest@example.com',
+            'password': 'password123',
+            'confirm_password': 'password123'
+        },
+        follow_redirects=True
+    )
+
+    assert response.status_code == 200
+    assert b'That username is taken. Please choose another.' in response.data
     assert b'Register' in response.data
 
 def test_user_authenticated(test_client):
