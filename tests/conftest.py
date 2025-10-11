@@ -3,6 +3,17 @@ from musicblog import create_app, db
 from musicblog.config import TestConfig
 from functional.test_data import UserFactory, PostFactory
 
+registration_data = {
+            'username': 'newuser',
+            'email': 'new@example.com',
+            'password': 'password123',
+            'confirm_password': 'password123'
+        }
+login_data = {
+            'email': 'new@example.com',
+            'password': 'password123'
+        }
+
 @pytest.fixture(scope='module')
 def test_app():
     """Create application for testing - created once per test file"""
@@ -31,6 +42,26 @@ def init_database(test_app):
         
         # Clean up after test
         db.session.remove()
+
+@pytest.fixture(scope='function')
+def register_user(test_client, init_database):
+    """Register user through HTTP"""
+    response = test_client.post('/register', 
+        data=registration_data,
+        follow_redirects=True
+    )
+
+    return response
+
+@pytest.fixture(scope='function')
+def login_user(test_client, register_user):
+    """Provide a logged-in client"""
+    response = test_client.post('/login', 
+        data=login_data,
+        follow_redirects=True
+    )
+
+    return response
 
 @pytest.fixture(scope='function')
 def test_user(init_database):
