@@ -2,7 +2,7 @@ from musicblog.models import User
  
 # ==================== REGISTRATION TESTS ====================
 
-def test_register_page_loads(test_client):
+def test_register_page_loads(test_client, init_database):
     """Test registration page loads"""
     response = test_client.get('/register')
     assert response.status_code == 200
@@ -30,11 +30,12 @@ def test_user_registration(test_client, init_database):
     assert user.username == 'newuser'
     assert user.email == 'new@example.com'
 
-def test_user_registration_with_existing_email(test_client):
-    """Test user registration fails with existing email"""
-    response = test_client.post('/register', 
+def test_user_authenticated(test_client, init_database):
+    """Test authenticated user"""
+
+    test_client.post('/register', 
         data={
-            'username': 'newuser1',
+            'username': 'newuser',
             'email': 'new@example.com',
             'password': 'password123',
             'confirm_password': 'password123'
@@ -42,28 +43,6 @@ def test_user_registration_with_existing_email(test_client):
         follow_redirects=True
     )
 
-    assert response.status_code == 200
-    assert b'That email is taken. Please choose another.' in response.data
-    assert b'Register' in response.data
-
-def test_user_registration_with_existing_username(test_client):
-    """Test user registration fails with existing email"""
-    response = test_client.post('/register', 
-        data={
-            'username': 'newuser',
-            'email': 'newtest@example.com',
-            'password': 'password123',
-            'confirm_password': 'password123'
-        },
-        follow_redirects=True
-    )
-
-    assert response.status_code == 200
-    assert b'That username is taken. Please choose another.' in response.data
-    assert b'Register' in response.data
-
-def test_user_authenticated(test_client):
-    """Test user can register"""
     test_client.post('/login', 
         data={
             'email': 'new@example.com',
@@ -77,8 +56,71 @@ def test_user_authenticated(test_client):
     assert response.status_code == 200
     assert len(response.history) == 1
     assert response.request.path == "/home"
-    
-    
+
+def test_user_registration_with_existing_email(test_client, init_database):
+    """Test user registration fails with existing email"""
+    test_client.post('/register', 
+        data={
+            'username': 'newuser',
+            'email': 'new@example.com',
+            'password': 'password123',
+            'confirm_password': 'password123'
+        },
+        follow_redirects=True
+    )
+    response = test_client.post('/register', 
+        data={
+            'username': 'newuser1',
+            'email': 'new@example.com',
+            'password': 'password123',
+            'confirm_password': 'password123'
+        },
+        follow_redirects=True
+    )
+
+    assert b'That email is taken. Please choose another.' in response.data
+    assert b'Register' in response.data
+
+def test_user_registration_with_existing_username(test_client, init_database):
+    """Test user registration fails with existing email"""
+    test_client.post('/register', 
+        data={
+            'username': 'newuser',
+            'email': 'new@example.com',
+            'password': 'password123',
+            'confirm_password': 'password123'
+        },
+        follow_redirects=True
+    )
+    response = test_client.post('/register', 
+        data={
+            'username': 'newuser',
+            'email': 'newtest@example.com',
+            'password': 'password123',
+            'confirm_password': 'password123'
+        },
+        follow_redirects=True
+    )
+
+    assert b'That username is taken. Please choose another.' in response.data
+    assert b'Register' in response.data
+
+def test_user_registration_pw_mismatch(test_client, init_database):
+    """Test user confirm password mismatch"""
+    response = test_client.post('/register', 
+        data={
+            'username': 'newuser',
+            'email': 'new@example.com',
+            'password': 'password123',
+            'confirm_password': 'password321'
+        },
+        follow_redirects=True
+    )
+
+    assert b'Field must be equal to password.' in response.data
+    user = User.query.filter_by(email='new@example.com').first()
+    assert user is None
+
 
 
 
