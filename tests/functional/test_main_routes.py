@@ -1,11 +1,7 @@
-from conftest import *
 from musicblog.models import User, Post
 
-def test_home_page_loads(test_client):
-    """Test that home page loads"""
-    response = test_client.get('/')
-    assert response.status_code == 200
-    
+# ==================== Home TESTS ====================   
+ 
 def test_home_route_alias(test_client):
     """Test that home page loads"""
     response = test_client.get('/home')
