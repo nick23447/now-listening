@@ -1,11 +1,17 @@
 from musicblog.models import User, Post
 
 # ==================== Home TESTS ====================   
+
+def test_home_route(test_client):
+    """Test that home page loads"""
+    response = test_client.get('/')
+    assert response.status_code == 200
  
 def test_home_route_alias(test_client):
     """Test that home page loads"""
     response = test_client.get('/home')
     assert response.status_code == 200
+    assert b'Home' in response.data
 
 def test_home_with_posts(test_client, sample_posts):
     """Test that posts load"""
