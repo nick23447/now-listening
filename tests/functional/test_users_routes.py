@@ -175,3 +175,13 @@ def test_user_autheticated(test_client, login_user):
 # ==================== LOGOUT TESTS ====================
 
 
+def test_logout(test_client, login_user):
+    """Test user can logout"""
+    response = test_client.get('/logout', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Home' in response.data
+    assert response.request.path == "/home"
+
+
+# ==================== ACCOUNT TESTS ====================
+
