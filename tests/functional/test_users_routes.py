@@ -97,6 +97,31 @@ def test_user_login(test_client, login_user):
     assert len(response.history) == 1
     assert response.request.path == "/home"
 
+def test_login_with_remember_me(test_client, register_user):
+    """Test login with remember me checked"""
+    response = test_client.post('/login',
+        data={
+            'email': 'test@example.com',
+            'password': 'testpassword123',
+            'remember': True
+        },
+        follow_redirects=True
+    )
     
+    assert response.status_code == 200
+
+def test_login_with_wrong_pw(test_client, register_user):
+    """Test login with remember me checked"""
+    response = test_client.post('/login',
+        data={
+            'email': 'test@example.com',
+            'password': 'testpassword'
+        },
+        follow_redirects=True
+    )
     
+    assert response.status_code == 200
+    assert b'Login Unsuccessful. Please check username and password' in response.data
+
+
     
