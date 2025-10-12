@@ -5,12 +5,12 @@ from functional.test_data import UserFactory, PostFactory
 
 registration_data = {
             'username': 'newuser',
-            'email': 'new@example.com',
+            'email': 'test@example.com',
             'password': 'password123',
             'confirm_password': 'password123'
         }
 login_data = {
-            'email': 'new@example.com',
+            'email': 'test@example.com',
             'password': 'password123'
         }
 
