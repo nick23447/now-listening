@@ -185,3 +185,100 @@ def test_logout(test_client, login_user):
 
 # ==================== ACCOUNT TESTS ====================
 
+
+def test_account_page_requires_login(test_client, init_database):
+    """Test that account page redirects to login if not authenticated"""
+    response = test_client.get('/account')
+    
+    assert response.status_code == 302
+    assert '/login' in response.location
+
+def test_account_page_loads(test_client, login_user):
+    """Test that account page loads for logged-in user"""
+    response = test_client.get('/account')
+    
+    assert response.status_code == 200
+    assert b'Account' in response.data
+
+    assert b'newuser' in response.data
+    assert b'test@example.com' in response.data
+
+def test_account_update_username_email(test_client, login_user):
+    """Test updating username and email on account page"""
+    response = test_client.post('/account',
+        data={
+            'username': 'updateduser',
+            'email': 'newtest@example.com'
+        },
+        follow_redirects=True
+    )
+    assert response.status_code == 200
+    assert b'Your account has been updated!' in response.data
+
+    user = User.query.filter_by(email='newtest@example.com').first()
+    assert user.username == 'updateduser'
+    assert user.email == 'newtest@example.com'
+
+def test_account_update_username(test_client, login_user):
+    """Test updating username on account page"""
+    response = test_client.post('/account',
+        data={
+            'username': 'updateduser',
+            'email': 'test@example.com'
+        },
+        follow_redirects=True
+    )
+    assert response.status_code == 200
+    assert b'Your account has been updated!' in response.data
+
+    user = User.query.filter_by(email='test@example.com').first()
+    assert user.username == 'updateduser'
+    assert user.email == 'test@example.com'
+
+def test_account_taken_username(test_client, register_users):
+    """Test account update fails when trying to use existing username"""
+    test_client.post('/login',
+        data={
+            'email': 'test1@example.com',
+            'password': 'password123'
+        },
+        follow_redirects=True
+    )
+
+    response = test_client.post('/account',
+        data={
+            'username': 'newuser2',
+            'email': 'test1@example.com'
+        },
+        follow_redirects=True
+    )
+    assert response.status_code == 200
+    assert b'That username is taken. Please choose another.' in response.data
+
+    user = User.query.filter_by(email='test1@example.com').first()
+    assert user.username == 'newuser1'
+    assert user.email == 'test1@example.com'
+
+def test_account_taken_email(test_client, register_users):
+    """Test account update fails when trying to use existing email"""
+    test_client.post('/login',
+        data={
+            'email': 'test1@example.com',
+            'password': 'password123'
+        },
+        follow_redirects=True
+    )
+
+    response = test_client.post('/account',
+        data={
+            'username': 'newuser1',
+            'email': 'test2@example.com'
+        },
+        follow_redirects=True
+    )
+    assert response.status_code == 200
+    assert b'That email is taken. Please choose another.' in response.data
+
+    user = User.query.filter_by(email='test1@example.com').first()
+    assert user.username == 'newuser1'
+    assert user.email == 'test1@example.com'
