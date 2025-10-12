@@ -139,6 +139,29 @@ def test_login_with_wrong_pw(test_client, register_user):
     assert b'Login Unsuccessful. Please check username and password' in response.data
     assert response.request.path == "/login"
 
+def test_login_redirects_to_next_page(test_client, register_user):
+    """Test that login redirects to 'next' parameter if provided"""
+    # Try to access protected page (account)
+    response = test_client.get('/account')
+    
+    # Should redirect to login with next parameter
+    assert response.status_code == 302
+    assert '/login' in response.location
+    
+    # Login with next parameter
+    response = test_client.post('/login?next=/account',
+        data={
+            'email': 'test@example.com',
+            'password': 'password123'
+        },
+        follow_redirects=True
+    )
+    
+    # Should be on account page now
+    assert response.status_code == 200
+    assert b'Account' in response.data
+    assert response.request.path == "/account"
+
 
 
 
