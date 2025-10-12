@@ -54,6 +54,24 @@ def register_user(test_client, init_database):
     return response
 
 @pytest.fixture(scope='function')
+def register_users(test_client, init_database):
+    """Register users through HTTP"""
+    responses = []
+    for i in range(3):
+        response = test_client.post('/register', 
+            data={
+            'username': f'newuser{i}',
+            'email': f'test{i}@example.com',
+            'password': f'password123',
+            'confirm_password': f'password123'
+        },
+            follow_redirects=True
+        )
+        responses.append(response)
+
+    return responses
+
+@pytest.fixture(scope='function')
 def login_user(test_client, register_user):
     """Provide a logged-in client"""
     response = test_client.post('/login', 
