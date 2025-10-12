@@ -3,6 +3,7 @@ from musicblog.models import User
 
 # ==================== REGISTRATION TESTS ====================
 
+
 def test_register_page_loads(test_client, init_database):
     """Test registration page loads"""
     response = test_client.get('/register')
@@ -79,6 +80,7 @@ def test_user_registration_pw_mismatch(test_client, init_database):
     assert b'Field must be equal to password.' in response.data
     user = User.query.filter_by(email='new@example.com').first()
     assert user is None
+
 
 # ==================== LOGIN TESTS ====================
 
@@ -162,7 +164,14 @@ def test_login_redirects_to_next_page(test_client, register_user):
     assert b'Account' in response.data
     assert response.request.path == "/account"
 
+def test_user_autheticated(test_client, login_user):
+    """Test that logged-in users are redirected from login page"""
+    response = test_client.get('/login', follow_redirects=True)
+
+    assert response.status_code == 200
+    assert response.request.path == "/home"
 
 
+# ==================== LOGOUT TESTS ====================
 
-    
+
