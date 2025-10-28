@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
-    album_name = HiddenField('Album Name', validators=[DataRequired()])
+    album_name = HiddenField('Album Name', validators=[DataRequired(message="Please select an album from the search.")])
     album_artist = HiddenField('Album Artist', validators=[DataRequired()])
     album_image = HiddenField('Album Image', validators=[DataRequired()])
     submit = SubmitField('Post')
