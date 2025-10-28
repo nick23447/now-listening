@@ -1,6 +1,6 @@
 import os
 import requests
-from flask import render_template, url_for, flash, redirect, Blueprint, request, jsonify
+from flask import render_template, url_for, flash, redirect, Blueprint, request, jsonify, abort
 from flask_login import login_required, current_user
 from musicblog import db
 from musicblog.models import Post
@@ -54,6 +54,28 @@ def new_post():
 		db.session.commit()
 		flash('Your post has been created!', 'success')
 		return redirect(url_for('main.home'))
-	return render_template('create_post.html', title='New Post', form=form)
+	return render_template('create_post.html', 
+		title='New Post', 
+		form=form,
+		legend='Create Post')
+
+@posts.route("/post/<int:post_id>")
+def post(post_id):
+	post = Post.query.get_or_404(post_id)
+	return render_template('post.html', title=post.title, post=post)
+
+@posts.route("/post/<int:post_id>/update")
+@login_required
+def update_post(post_id):
+	post = Post.query.get_or_404(post_id)
+	if post.author != current_user:
+		abort(403)
+
+	form = PostForm()
+	return render_template('create_post.html', 
+		title='Update Post', 
+		form=form,
+		legend='Update Post')
 
 
+ 
