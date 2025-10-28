@@ -64,7 +64,7 @@ def post(post_id):
 	post = Post.query.get_or_404(post_id)
 	return render_template('post.html', title=post.title, post=post)
 
-@posts.route("/post/<int:post_id>/update")
+@posts.route("/post/<int:post_id>/update", methods=['GET','POST'])
 @login_required
 def update_post(post_id):
 	post = Post.query.get_or_404(post_id)
@@ -72,10 +72,22 @@ def update_post(post_id):
 		abort(403)
 
 	form = PostForm()
+	if form.validate_on_submit():
+		post.title = form.title.data
+		post.content = form.content.data
+		post.album_name=form.album_name.data
+		post.album_artist=form.album_artist.data
+		post.album_image=form.album_image.data
+		post.author=current_user
+		db.session.commit()
+		flash('Your post had been updated!', 'success')
+		return redirect(url_for('post', post_id=post_id))
+	
+	elif request.method == 'GET':
+		form.title.data = post.title
+		form.content.data = post.content
+
 	return render_template('create_post.html', 
 		title='Update Post', 
 		form=form,
 		legend='Update Post')
-
-
- 
