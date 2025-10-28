@@ -22,7 +22,10 @@ def get_spotify_token():
 
 @posts.route('/search_album')
 def search_album():
-	query = request.args.get("q") 
+	query = request.args.get("q", "").strip()
+	if not query:
+		return jsonify({"albums": {"items":[]}}) 
+	
 	token = get_spotify_token()   
 	limit = request.args.get("limit", 20)
 	headers = {"Authorization": f"Bearer {token}"} 
