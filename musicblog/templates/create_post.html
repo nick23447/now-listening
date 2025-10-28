@@ -27,6 +27,14 @@
                 <label for="album-search" class="form-control-label">Album</label>
                 <input type="text" id="album-search" class="form-control mb-2" placeholder="Search for an album...">
                 <ul id="album-results" class="list-group"></ul>
+
+                 {% if form.album_name.errors %}
+                  <div class="invalid-feedback d-block">
+                    {% for error in form.album_name.errors %}
+                      <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
             </div>
 
             <!-- Album Preview -->
