@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+    <article class="d-flex content-section rounded mb-4">
+        
+        {% if post.album_image %}
+            <div class="flex-shrink-0 me-3">
+                <img 
+                    src="{{ post.album_image }}" 
+                    alt="{{ post.album_name }}" 
+                    class="img-fluid rounded"
+                    style="width: 200px; height: auto;"
+                >
+                <p class="mt-1"><strong>{{ post.album_name }}</strong><br>{{ post.album_artist }}</p>
+            </div>
+        {% endif %}
+
+        <div class="flex-grow-1">
+            <div class="article-metadata mb-2">
+                <a class="mr-2" href="#">{{ post.author }}</a>
+                <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+
+            <h2 class="mt-0">{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+        </div>
+
+    </article>
+{% endblock content %}
