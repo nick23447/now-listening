@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for post in posts %}
+    {% for post in posts.items %}
         <article class="d-flex content-section rounded mb-4">
             
             {% if post.album_image %}
