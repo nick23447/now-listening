@@ -10,7 +10,7 @@ def home():
 	posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
 	return render_template('home.html', posts=posts)
 
-@main.route('/user/<str:username>')
+@main.route('/user/<string:username>')
 def user_posts(username):
 	page = request.args.get('page', 1, type=int)
 	user = User.query.filter_by(username=username).first_or_404()
@@ -18,5 +18,5 @@ def user_posts(username):
 		.order_by(Post.date_posted.desc())\
 		.paginate(page=page, per_page=5)
 	
-	return render_template('home.html', posts=posts)
+	return render_template('user_posts.html', posts=posts)
 
