@@ -3,7 +3,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from musicblog import db, bcrypt
 from musicblog.models import User
-from musicblog.users.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from musicblog.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
 from musicblog.users.utils import save_picture
 
 users = Blueprint('users', __name__)
@@ -77,3 +77,10 @@ def account():
 	image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 	return render_template('account.html', title='Account', image_file=image_file, form=form)
 
+
+@users.route("/reset_password", methods=['GET','POST'])
+def reset_request():
+	if current_user.is_authenticated:
+		return redirect(url_for('home'))
+	form = RequestResetForm()
+	return render_template('reset_request.html', title='Reset Password', form=form)
