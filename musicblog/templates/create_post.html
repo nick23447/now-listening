@@ -22,6 +22,23 @@
                 {% endif %}
             </div>
 
+            <!-- Rating -->
+             <div class="form-group">
+              {{ form.rating.label(class="form-control-label") }}
+
+              {% if form.rating.errors %}
+                  {{ form.rating(class="form-control form-control-lg mb-2 is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.rating.errors %}
+                          <span>{{ error}} </span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.rating(class="form-control form-control-lg mb-2", 
+                    min=1, max=5, onkeydown="return false;") }}
+              {% endif %}
+             </div>
+
             <!-- Album Search -->
             <div class="form-group">
                 <label for="album-search" class="form-control-label">Album</label>
