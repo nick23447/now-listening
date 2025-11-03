@@ -26,6 +26,7 @@ def create_app(config_class=Config):
     from musicblog.users.routes import users
     from musicblog.posts.routes import posts
     from musicblog.main.routes import main
+    from musicblog.main.routes import errors
 
     app.register_blueprint(users)
     app.register_blueprint(posts)
