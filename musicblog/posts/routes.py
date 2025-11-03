@@ -45,6 +45,7 @@ def new_post():
 		post = Post(
 			title=form.title.data, 
 			content=form.content.data, 
+			rating=form.rating.data,
 			album_name=form.album_name.data, 
 			album_artist=form.album_artist.data,
 			album_image=form.album_image.data, 
@@ -75,6 +76,7 @@ def update_post(post_id):
 	if form.validate_on_submit():
 		post.title = form.title.data
 		post.content = form.content.data
+		post.rating = form.rating.data
 		post.album_name=form.album_name.data
 		post.album_artist=form.album_artist.data
 		post.album_image=form.album_image.data
@@ -86,6 +88,7 @@ def update_post(post_id):
 	elif request.method == 'GET':
 		form.title.data = post.title
 		form.content.data = post.content
+		form.rating.data = post.rating
 
 	return render_template('create_post.html', 
 		title='Update Post', 
