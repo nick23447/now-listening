@@ -84,6 +84,7 @@ def account():
 	image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 	return render_template('account.html', title='Account', image_file=image_file, form=form)
 
+
 def send_reset_email(user):
 	token = user.get_reset_token()
 	msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
@@ -92,6 +93,7 @@ def send_reset_email(user):
 
 If you did not make this request then simply ignore this email and  no changes will be made.
 """
+	mail.send(msg)
 
 
 @users.route("/reset_password", methods=['GET','POST'])
@@ -106,7 +108,7 @@ def reset_request():
 		flash('An email has been sent with instructions to reset your password.', 'info')
 		return redirect(url_for('users.login'))
 	
-	return render_template('users.reset_request.html', title='Reset Password', form=form)
+	return render_template('reset_request.html', title='Reset Password', form=form)
 
 
 @users.route("/reset_password/<token>", methods=['GET','POST'])
@@ -127,4 +129,4 @@ def reset_token(token):
 		flash(f"Your password has been updated! You are now able to log in.", 'success')
 		return redirect(url_for('users.login'))
 	
-	return render_template('users.reset_token.html', title='Reset Password', form=form)
+	return render_template('reset_token.html', title='Reset Password', form=form)
