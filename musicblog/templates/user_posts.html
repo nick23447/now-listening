@@ -11,6 +11,15 @@
                         class="img-fluid rounded"
                         style="width: 200px; height: auto;"
                     ><p class="mt-1"><strong>{{ post.album_name }}</strong><br>{{ post.album_artist }}</p>
+                    <div class="mt-1">
+                        {% for i in range(1, 6) %}
+                            {% if i <= post.rating %}
+                            <span style="color: #FFD700;">★</span>
+                            {% else %}
+                            <span style="color: #ccc;">☆</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             {% endif %}
             <div class="flex-grow-1">
