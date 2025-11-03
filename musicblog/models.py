@@ -1,5 +1,6 @@
-from musicblog import db, login_manager, app
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from musicblog import db, login_manager
+from flask import current_app
+from itsdangerous import URLSafeTimedSerializer as Serializer
 from datetime import datetime, timezone
 from flask_login import UserMixin
 
@@ -16,16 +17,16 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
-    def get_reset_token(self, expires_sec=1800):
-        s = Serializer(app.config['SECRET_KEY'], expires_sec)
-        token = s.dumps({'user_id': self.id}).decode('utf-8')
+    def get_reset_token(self):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        token = s.dumps({'user_id': self.id})
         return token
     
     @staticmethod
-    def verify_reset_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
+    def verify_reset_token(token, expires_sec=900):
+        s = Serializer(current_app.config['SECRET_KEY'])
         try:
-            user_id = s.loads(token)['user_id']
+            user_id = s.loads(token, max_age=expires_sec)['user_id']
         except:
             return None
         
