@@ -1,104 +1,306 @@
 body {
-    background: #fafafa;
-    color: #333333;
+    /* ===== BODY BACKGROUND COLOR ===== */
+    background: #1b2424;
+
+    /* ===== BODY TEXT COLOR ===== */
+    color: #0d0d0d;
     margin-top: 5rem;
+    min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
-color: #444444;
+    /* ===== HEADING TEXT COLOR ===== */
+    color: #5d5f5f;
 }
 
-.bg-steel {
-background-color: #5f788a;
+/* ===== NAVBAR COLORS ===== */
+.navbar {
+    /* Navbar background */
+    background-color: #b6aca8;
 }
 
 .site-header .navbar-nav .nav-link {
-color: #cbd5db;
+    /* Navbar link color */
+    color: #ffffff7b;
 }
 
 .site-header .navbar-nav .nav-link:hover {
-color: #ffffff;
+    /* Navbar link hover color */
+    color: #ffffff;
 }
 
 .site-header .navbar-nav .nav-link.active {
-font-weight: 500;
+    font-weight: 500;
+    /* Navbar active link color */
+    color: #e8dcc8;
 }
 
+/* ===== POST CONTAINER COLORS ===== */
 .content-section {
-background: #ffffff;
-padding: 10px 20px;
-border: 1px solid #dddddd;
-border-radius: 3px;
-margin-bottom: 20px;
+    /* Post container background */
+    background:rgb(237, 235, 232);
+    padding: 20px 24px;
+    /* Post container border color */
+    border: 5px solid #5a3d55;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-.article-title {
-color: #444444;
+/* Post Header with Title at Top */
+.post-header {
+    margin-bottom: 20px;
 }
 
-a.article-title:hover {
-color: #428bca;
-text-decoration: none;
+.post-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 1.75rem;
+    line-height: 1.3;
 }
 
-.article-content {
-white-space: pre-line;
-}
-
-.article-img {
-height: 65px;
-width: 65px;
-margin-right: 16px;
-}
-
+/* ===== METADATA (USERNAME/DATE) COLORS ===== */
 .article-metadata {
-padding-bottom: 1px;
-margin-bottom: 4px;
-border-bottom: 1px solid #e3e3e3
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    /* Metadata border color */
+    border-bottom: 1px solid #949696;
+    font-size: 0.9rem;
+}
+
+.article-metadata a {
+    /* Username link color */
+    color: #b98d3a;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 .article-metadata a:hover {
-color: #333;
-text-decoration: none;
+    /* Username link hover color */
+    color: #d4a152;
+    text-decoration: none;
+}
+
+.article-metadata .text-muted {
+    /* Date text color */
+    color: #0b2335ea !important;
+}
+
+/* ===== ALBUM BOX COLORS ===== */
+.album-box {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    /* Album box background */
+    background: #43473e;
+    /* Album box border color */
+    /* border: 1px solid #5a3d55; */
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.album-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    flex-shrink: 0;
+}
+
+.album-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.album-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    /* Album name text color */
+    color: #e8dcc8;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+}
+
+.album-artist {
+    font-size: 1.1rem;
+    /* Artist name text color */
+    color: #caaf9c;
+    margin: 0 0 12px 0;
+}
+
+/* ===== STAR RATING COLORS ===== */
+.rating {
+    display: flex;
+    gap: 4px;
+    font-size: 1.5rem;
+}
+
+.star.filled {
+    /* Filled star color */
+    color: #d4a152;
+}
+
+.star.empty {
+    /* Empty star color */
+    color: #d8d5d1;
+}
+
+/* ===== CONTENT BOX COLORS ===== */
+.post-content-box {
+    /* Content box background */
+    background: #e1e1e1;
+    /* Content box border color */
+    border: 1px solid #4c4234;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.post-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    /* Content text color */
+    color: #000000;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+}
+
+/* ===== TITLE LINK COLORS ===== */
+.article-title {
+    /* Title link color */
+    color: #2b271c;
+    text-decoration: none;
+}
+
+a.article-title:hover {
+    /* Title link hover color */
+    color: #1f4c14;
+    text-decoration: none;
+}
+
+.article-content {
+    white-space: pre-line;
+}
+
+.article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
 }
 
 .article-svg {
-width: 25px;
-height: 25px;
-vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
 }
 
 .account-img {
-height: 125px;
-width: 125px;
-margin-right: 20px;
-margin-bottom: 16px;
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
 }
 
 .account-heading {
-font-size: 2.5rem;
+    font-size: 2.5rem;
 }
 
-
-/* <-- Post CSS --> */
-
-.content-section a:link {
-  color: green;
-  text-decoration: none;
+/* ===== PAGINATION COLORS ===== */
+.pagination {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
-.content-section a:visited {
-  color: #1D4561;
-  text-decoration: none;
+.pagination-ellipsis {
+    /* Pagination ellipsis (...) color */
+    color: #4c4234;
+    padding: 0 8px;
 }
 
-.content-section a:hover {
-  color: lightblue;
-  text-decoration: underline;
+.btn-info {
+    /* Active page button background */
+    background-color: #5E6253;
+    /* Active page button border */
+    border-color: #966926;
+    /* Active page button text */
+    color: #e8dcc8;
 }
 
-.content-section a:active {
-  color: yellow;
-  text-decoration: underline;
+.btn-info:hover {
+    /* Active page button hover background */
+    background-color: #663306;
+    /* Active page button hover border */
+    border-color: #663306;
 }
 
+.btn-outline-info {
+    /* Inactive page button text */
+    color: #966926;
+    /* Inactive page button border */
+    border-color: #966926;
+    background-color: transparent;
+}
+
+.btn-outline-info:hover {
+    /* Inactive page button hover background */
+    background-color: #966926;
+    /* Inactive page button hover border */
+    border-color: #966926;
+    /* Inactive page button hover text */
+    color: #e8dcc8;
+}
+
+/* ===== CONTENT LINK COLORS ===== */
+.post-content-box a:link {
+    /* Link text color */
+    color: #1a2328;
+    /* Link background color */
+    background-color: #b98d3a;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.post-content-box a:visited {
+    /* Visited link text color */
+    color: #1a2328;
+    /* Visited link background color */
+    background-color: #caaf9c;
+}
+
+.post-content-box a:hover {
+    /* Link hover text color */
+    color: #e8dcc8;
+    /* Link hover background color */
+    background-color: #663306;
+    text-decoration: none;
+}
+
+.post-content-box a:active {
+    /* Link active text color */
+    color: #e8dcc8;
+    /* Link active background color */
+    background-color: #352315;
+    text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .album-box {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .album-image {
+        width: 200px;
+        height: 200px;
+    }
+}
