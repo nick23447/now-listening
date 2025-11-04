@@ -10,16 +10,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='dropdown.css') }}">
 
     {% if title %}
-        <title>Now Listening - {{ title }}</title>
+        <title class="title">Now Listening - {{ title }}</title>
     {% else %}
-        <title>Now Listening</title>
+        <title class="title">Now Listening</title>
     {% endif %}
 </head>
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top">
           <div class="container">
-            <a class="navbar-brand me-4" href="/">Now Listening</a>
+            <a class="navbar-brand me-4 logo-link" href="{{ url_for('main.home') }}">
+              <img 
+                src="{{ url_for('static', filename='../static/logo/logo-default.svg') }}" 
+                alt="Now Listening Logo"
+                class="logo-img">
+            </a>
             <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarToggle"
