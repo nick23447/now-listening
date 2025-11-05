@@ -36,7 +36,7 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
-                <a class="nav-item nav-link" href="#">About</a>
+                <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
               </div>
               <div class="navbar-nav ms-auto">
                 {% if current_user.is_authenticated %}
@@ -68,13 +68,18 @@
             </div>
             <div class="col-md-4">
             <div class="content-section rounded">
-                <h3><strong>Our Sidebar</strong></h3>
-                <p class='text-muted'>You can put any information here you'd like.
+                <h3><strong>Library</strong></h3>
+                <p class='text-muted'>Explore the latest posts & your personal content</p>
                     <ul class="list-group">
-                        <li class="list-group-item list-group-item-light">Latest Posts</li>
-                        <li class="list-group-item list-group-item-light">Announcements</li>
-                        <li class="list-group-item list-group-item-light">Calendars</li>
-                        <li class="list-group-item list-group-item-light">etc</li>
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('main.home') }}">Latest Posts</a></li>
+                        <li class="list-group-item list-group-item-light">
+                          {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('main.user_posts', username=current_user.username) }}">My Posts</a>
+                          {% else %}
+                            <a href="{{ url_for('users.login') }}">My Posts</a>
+                          {% endif %}
+                        </li>
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('posts.album_ratings') }}">Ratings</a></li>
                     </ul>
                 </p>
             </div>
