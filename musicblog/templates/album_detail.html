@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="album-detail-container">
+    <div class="album-detail-header">
+        <img src="{{ album.image }}" alt="{{ album.name }}" class="album-detail-image">
+        <div class="album-detail-info">
+            <h2 class="album-detail-name">{{ album.name }}</h2>
+            <h4 class="album-detail-artist">{{ album.artist }}</h4>
+            <div class="album-detail-rating">
+                {% for i in range(1, 6) %}
+                    {% if i <= avg_rating|round(0, 'floor') %}
+                        <span class="star filled">★</span>
+                    {% else %}
+                        <span class="star empty">☆</span>
+                    {% endif %}
+                {% endfor %}
+                <span class="rating-number">{{ "%.2f"|format(avg_rating) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border-color: #314d65;">
+
+    <h4 class="section-heading">
+        User Ratings:
+        <span class="rating-count-box">{{ rating_count }}</span>
+    </h4>
+    <hr style="border-color: #314d65;">
+
+    <h4 class="section-heading">User Posts</h4>
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post-box">
+                <h5>{{ post.title }}</h5>
+                <small class="text-muted">
+                    By {{ post.author.username }} on {{ post.date_posted.strftime('%Y-%m-%d') }}
+                </small>
+                <p class="post-content">{{ post.content }}</p>
+                <div class="rating">
+                    {% for i in range(1, 5 + 1) %}
+                        {% if i <= post.rating %}
+                            <span class="star filled">★</span>
+                        {% else %}
+                            <span class="star empty">☆</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-state">No posts for this album yet.</p>
+    {% endif %}
+</div>
+
+{% endblock content %}
