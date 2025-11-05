@@ -633,3 +633,185 @@ a:active {
     font-weight: 600;
     margin-left: 6px;
 }
+
+/* ===== CLICKABLE ALBUM CARDS (ALBUM RATINGS PAGE) ===== */
+
+.album-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.album-link:hover .album-card {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== ALBUM DETAIL PAGE ===== */
+
+.album-detail-container {
+    background: #f2efe9;               /* light cream panel */
+    border: 4px solid #314d65;         /* matches .content-section border */
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    color: #1b2424;
+}
+
+.album-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.album-detail-image {
+    width: 220px;
+    height: 220px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
+}
+
+.album-detail-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.album-detail-name {
+    color: #3a5e52;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.album-detail-artist {
+    color: #5a3d55;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.album-detail-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.album-detail-rating .rating-number {
+    color: #3a5e52;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+/* Section headings & text */
+
+.section-heading {
+    color: #3a5e52;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.empty-state {
+    color: #1b2424;
+    font-style: italic;
+}
+
+/* Ratings list */
+
+.rating-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.rating-list li {
+    color: #1b2424;
+    margin-bottom: 4px;
+}
+
+.rating-username {
+    font-weight: 600;
+    color: #3a5e52;
+}
+
+.user-rating {
+    color: #d4a152;
+    font-weight: 700;
+}
+
+/* Album-specific post boxes on detail page */
+
+.post-box {
+    background: #43473e;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.post-box h5 {
+    color: #f2efe9;
+    margin-bottom: 4px;
+}
+
+.post-box .text-muted {
+    color: #caaf9c !important;
+}
+
+.post-content {
+    color: #e8dcc8;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+}
+
+/* Responsive for album detail */
+
+@media (max-width: 768px) {
+    .album-detail-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .album-detail-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .album-detail-info {
+        align-items: center;
+    }
+}
+
+/* ===== RATING COUNT BOX ===== */
+.rating-count-box {
+    display: inline-block;
+    vertical-align: middle;  
+    background-color: #3a5e52;
+    color: #f2efe9;
+    border: 2px solid #314d65;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-left: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+}
+
+
+.rating-count-box:hover {
+    background-color: #5a3d55;   /* plum hover tone */
+    border-color: #5a3d55;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.rating-count-box {
+    font-size: 0.9em; /* scales with h4 font size */
+    padding: 3px 8px;
+}
+
