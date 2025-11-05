@@ -5,14 +5,16 @@ from werkzeug.wrappers import Response
 from flask import render_template, url_for, flash, redirect, Blueprint, request, jsonify, abort
 from flask_login import login_required, current_user
 from musicblog import db
-from musicblog.models import Post
+from musicblog.models import Post, Album, AlbumRating
 from musicblog.posts.forms import PostForm
+from sqlalchemy import func
 
 posts = Blueprint('posts', __name__)
 
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 
+# ---------- Spotify API ----------
 def get_spotify_token() -> Optional[str]:
 	auth_response = requests.post(
         'https://accounts.spotify.com/api/token',
@@ -40,6 +42,8 @@ def search_album() -> Response:
     
 	return cast(Response, jsonify(res.json()))
 
+
+# ---------- New Post ----------
 @posts.route('/post/new', methods=['GET','POST'])
 @login_required #type: ignore
 def new_post() -> Union[str, Response]:
@@ -52,8 +56,39 @@ def new_post() -> Union[str, Response]:
 			album_name=form.album_name.data, 
 			album_artist=form.album_artist.data,
 			album_image=form.album_image.data, 
-			author=current_user)
+			author=current_user
+		)
+
+		album = Album.query.filter_by(
+            name=form.album_name.data.strip(),
+            artist=form.album_artist.data.strip()
+        ).first()
 		
+		existing_rating = AlbumRating.query.filter_by(
+			user_id=current_user.id,
+			album_id=album.id
+		).first()
+		
+		if not album:
+			album = Album(
+                name=form.album_name.data.strip(),
+                artist=form.album_artist.data.strip(),
+                image=form.album_image.data
+            )
+			db.session.add(album)
+			db.session.flush()
+
+		if existing_rating:
+			existing_rating.rating = form.rating.data
+
+		else:
+			album_rating = AlbumRating(
+				user_id=current_user.id,
+				album_id=album.id,
+				rating=form.rating.data
+			)
+			db.session.add(album_rating)
+	
 		db.session.add(post)
 		db.session.commit()
 		flash('Your post has been created!', 'success')
@@ -63,17 +98,32 @@ def new_post() -> Union[str, Response]:
 		form=form,
 		legend='Create Post')
 
+
+# ---------- Individual Posts ----------
 @posts.route("/post/<int:post_id>")
 def post(post_id: int) -> str:
 	post = Post.query.get_or_404(post_id)
 	return render_template('post.html', title=post.title, post=post)
 
+
+# ---------- Update Post ----------
 @posts.route("/post/<int:post_id>/update", methods=['GET','POST'])
 @login_required #type: ignore
 def update_post(post_id: int) -> Union[str, Response]:
 	post = Post.query.get_or_404(post_id)
+
 	if post.author != current_user:
 		abort(403)
+
+	album_name = Album.query.filter_by(
+		name=post.album_name, 
+		artist=post.album_artist
+	).first()
+	
+	album_rating = AlbumRating.query.filter_by(
+		user_id=current_user.id,
+		album_id=album_name.id
+	).first()
 
 	form = PostForm()
 	if form.validate_on_submit():
@@ -84,6 +134,8 @@ def update_post(post_id: int) -> Union[str, Response]:
 		post.album_artist=form.album_artist.data
 		post.album_image=form.album_image.data
 		post.author=current_user
+		album_rating.rating = form.rating.data
+
 		db.session.commit()
 		flash('Your post had been updated!', 'success')
 		return redirect(url_for('posts.post', post_id=post_id))
@@ -98,6 +150,8 @@ def update_post(post_id: int) -> Union[str, Response]:
 		form=form,
 		legend='Update Post')
 
+
+# ---------- Delete Post ----------
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required #type: ignore
 def delete_post(post_id: int) -> Response:
@@ -108,3 +162,24 @@ def delete_post(post_id: int) -> Response:
 	db.session.commit()
 	flash('Your post has been deleted!', 'success')
 	return redirect(url_for('main.home'))
+
+
+# ---------- Average Ratings ----------
+@posts.route("/album_ratings")
+def album_ratings() -> str:
+    page = request.args.get('page', 1, type=int)
+    albums_with_avg_ratings = (
+        db.session.query(
+            Album.id,
+            Album.name,
+            Album.artist,
+            Album.image,
+            func.avg(AlbumRating.rating).label('average_rating'),
+            func.count(AlbumRating.id).label('rating_count')
+        )
+        .outerjoin(AlbumRating, Album.id == AlbumRating.album_id)
+        .group_by(Album.id)
+        .order_by(func.avg(AlbumRating.rating).desc())
+        .paginate(page=page, per_page=12)
+    )
+    return render_template('album_ratings.html', title='Album Ratings', albums=albums_with_avg_ratings)
