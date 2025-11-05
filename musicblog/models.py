@@ -5,7 +5,7 @@ from typing import List, Optional
 from flask import current_app
 from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer as Serializer
-from sqlalchemy import Integer, String, Text, DateTime, Float
+from sqlalchemy import Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column # type: ignore[attr-defined]
 
 from musicblog import db, login_manager
@@ -47,6 +47,7 @@ class User(db.Model, UserMixin): # type: ignore
         return f"{self.username}"
         #return f"User('{self.username}'), '{self.email}', '{self.image_file}')"
     
+
 class Post(db.Model):  # type: ignore
     __tablename__ = 'post'
 
@@ -64,15 +65,37 @@ class Post(db.Model):  # type: ignore
 
     def __repr__(self) -> str:
         return f"User('{self.title}'), '{self.date_posted}')"
-    
-class Album_Ratings(db.Model):  # type: ignore
-    __tablename__ = 'album_ratings'
+
+class Album(db.Model): #type: ignore
+    __tablename__ = 'album'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    album_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    album_artist: Mapped[str] = mapped_column(String(100), nullable=False)
-    album_image: Mapped[str] = mapped_column(String(100), nullable=False)
-    avg_rating: Mapped[float] = mapped_column(Float, nullable=False)
+    name: Mapped[str] = mapped_column(String(250), nullable=False)
+    artist: Mapped[str] = mapped_column(String(250), nullable=False)
+    image: Mapped[str] = mapped_column(String(250), nullable=False)
+
+    ratings = db.relationship('AlbumRating', backref='album', lazy=True)
+
+    @property
+    def avg_rating(self) -> float:
+        if not self.ratings:
+            return 0.0
+        return round(sum(r.rating for r in self.ratings) / len(self.ratings), 2)
 
     def __repr__(self) -> str:
-        return f"User('{self.album_name}'), '{self.album_artist}')"
+        return f"<Album {self.name} by {self.artist}>"
+
+class AlbumRating(db.Model): #type: ignore
+    __tablename__ = 'album_rating'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'), nullable=False)
+    album_id: Mapped[int] = mapped_column(Integer, ForeignKey('album.id'), nullable=False)
+    rating: Mapped[int] = mapped_column(Integer, nullable=False)
+ 
+    __table_args__ = (db.UniqueConstraint('user_id', 'album_id', name='unique_user_album'),)
+
+    def __repr__(self) -> str:
+        return f"<AlbumRating user={self.user_id} album={self.album_id} rating={self.rating}>"
+
+
