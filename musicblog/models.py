@@ -60,6 +60,8 @@ class Post(db.Model):  # type: ignore
     album_artist: Mapped[str] = mapped_column(String(250), nullable=False)
     album_image: Mapped[str] = mapped_column(String(250), nullable=False)
 
+    album_id: Mapped[int] = mapped_column(Integer, db.ForeignKey('album.id'), nullable=False)
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
@@ -81,6 +83,10 @@ class Album(db.Model): #type: ignore
         if not self.ratings:
             return 0.0
         return round(sum(r.rating for r in self.ratings) / len(self.ratings), 2)
+    
+    @property
+    def total_ratings(self) -> float:
+        return len(self.ratings)
 
     def __repr__(self) -> str:
         return f"<Album {self.name} by {self.artist}>"
