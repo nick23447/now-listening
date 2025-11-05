@@ -5,26 +5,29 @@
 
 <div class="album-grid">
     {% for album in albums %}
-        <div class="album-card rounded">
-            <img src="{{ album.image }}" alt="{{ album.name }}" class="album-card-image">
-            <div class="album-card-info">
-                <h5 class="album-card-name">{{ album.name }}</h5>
-                <p class="album-card-artist">{{ album.artist }}</p>
-                <div class="album-card-rating">
-                    {% set avg = album.average_rating or 0 %}
-                    {% for i in range(1, 6) %}
-                        {% if i <= avg|round(0, 'floor') %}
-                            <span class="star filled">★</span>
-                        {% else %}
-                            <span class="star empty">☆</span>
-                        {% endif %}
-                    {% endfor %}
-                    <span class="rating-number">{{ "%.2f"|format(avg) }}</span>
+        <a href="{{ url_for('posts.album_detail', album_id=album.id) }}" class="album-link">
+            <div class="album-card rounded">
+                <img src="{{ album.image }}" alt="{{ album.name }}" class="album-card-image">
+                <div class="album-card-info">
+                    <h5 class="album-card-name">{{ album.name }}</h5>
+                    <p class="album-card-artist">{{ album.artist }}</p>
+                    <div class="album-card-rating">
+                        {% set avg = album.average_rating or 0 %}
+                        {% for i in range(1, 6) %}
+                            {% if i <= avg|round(0, 'floor') %}
+                                <span class="star filled">★</span>
+                            {% else %}
+                                <span class="star empty">☆</span>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="rating-number">{{ "%.2f"|format(avg) }}</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
     {% endfor %}
 </div>
+
 
 <!-- Optional Pagination -->
 <div class="pagination mt-4 justify-content-center">
