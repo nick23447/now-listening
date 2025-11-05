@@ -6,15 +6,15 @@ from musicblog.config import Config
 from flask_migrate import Migrate
 from flask_mail import Mail
 
-db = SQLAlchemy()
-migrate = Migrate()
-bcrypt = Bcrypt()
-login_manager = LoginManager()
+db: SQLAlchemy= SQLAlchemy()
+migrate: Migrate = Migrate()
+bcrypt: Bcrypt = Bcrypt()
+login_manager: LoginManager = LoginManager()
 login_manager.login_view = 'users.login'
-mail = Mail()
+mail: Mail = Mail()
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
+def create_app(config_class: type[Config] = Config) -> Flask:
+    app: Flask = Flask(__name__)
     app.config.from_object(config_class)
 
     db.init_app(app)

@@ -1,5 +1,16 @@
+from __future__ import annotations
 import os
-from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app
+from typing import Union, Optional
+from flask import (
+    render_template, 
+    url_for, 
+    flash, 
+    redirect, 
+    request, 
+    Blueprint, 
+    current_app,
+)
+from werkzeug.wrappers import Response
 from flask_login import login_user, current_user, logout_user, login_required
 from musicblog import db, bcrypt, mail
 from musicblog.models import User
@@ -8,15 +19,17 @@ from musicblog.users.forms import(
 	LoginForm, 
 	UpdateAccountForm, 
 	RequestResetForm, 
-	ResetPasswordForm)
-
+	ResetPasswordForm
+)
 from musicblog.users.utils import save_picture
-from flask_mail import Message
+from musicblog.users.utils import send_reset_email
 
 users = Blueprint('users', __name__)
 
+
+# ---------- REGISTER ----------
 @users.route('/register', methods=['GET','POST'])
-def register():
+def register() -> Union[str, Response]:
 	if current_user.is_authenticated:
 		return redirect(url_for('main.home'))
     
@@ -33,15 +46,16 @@ def register():
 	return render_template('register.html', title='Register', form=form)
 
 
+# ---------- Login ----------
 @users.route('/login', methods=['GET','POST'])
-def login():
+def login() -> Union[str, Response]:
 	if current_user.is_authenticated:
 		return redirect(url_for('main.home'))
     
 	form = LoginForm()
 
 	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()
+		user: User = User.query.filter_by(email=form.email.data).first()
 		if user and bcrypt.check_password_hash(user.password, form.password.data):
 			login_user(user, remember=form.remember.data)
 			next_page = request.args.get('next')
@@ -52,20 +66,22 @@ def login():
 	return render_template('login.html', title='Login', form=form)
 
 
+# ---------- LOGOUT ----------
 @users.route('/logout')
-def logout():
+def logout() -> Response:
 	logout_user()
 	return redirect(url_for('main.home'))
 
 
+# ---------- ACCOUNT ----------
 @users.route('/account', methods=['GET','POST'])
-@login_required
-def account():
+@login_required # type: ignore 
+def account() -> Union[str, Response]:
 	form = UpdateAccountForm()
 	if form.validate_on_submit():
 		if form.picture.data:
 			old_pic = current_user.image_file
-			picture_file = save_picture(form.picture.data)
+			picture_file: str = save_picture(form.picture.data)
 			current_user.image_file = picture_file
 			if old_pic != 'default.jpg':
 				os.remove(os.path.join(current_app.root_path, 'static/profile_pics', old_pic))
@@ -85,19 +101,9 @@ def account():
 	return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 
-def send_reset_email(user):
-	token = user.get_reset_token()
-	msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
-	msg.body = f"""To reset your password, visit the following link:
-{url_for('users.reset_token', token=token, _external=True)}
-
-If you did not make this request then simply ignore this email and  no changes will be made.
-"""
-	mail.send(msg)
-
-
+# ---------- RESET REQUEST ----------
 @users.route("/reset_password", methods=['GET','POST'])
-def reset_request():
+def reset_request() -> Union[str, Response]:
 	if current_user.is_authenticated:
 		return redirect(url_for('home'))
 	
@@ -111,12 +117,14 @@ def reset_request():
 	return render_template('reset_request.html', title='Reset Password', form=form)
 
 
+# ---------- RESET TOKEN ----------
 @users.route("/reset_password/<token>", methods=['GET','POST'])
-def reset_token(token):
+def reset_token(token: str) -> Union[str, Response]:
 	if current_user.is_authenticated:
 		return redirect(url_for('home'))
-	
-	user = User.verify_reset_token(token)
+
+	user: Optional[User] = User.verify_reset_token(token)
+
 	if not user:
 		flash('That is an invalid or expired token', "warning")
 		return redirect(url_for('users.reset_request'))

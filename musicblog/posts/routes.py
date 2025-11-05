@@ -1,5 +1,7 @@
 import os
 import requests
+from typing import Optional, Union, cast
+from werkzeug.wrappers import Response
 from flask import render_template, url_for, flash, redirect, Blueprint, request, jsonify, abort
 from flask_login import login_required, current_user
 from musicblog import db
@@ -11,20 +13,21 @@ posts = Blueprint('posts', __name__)
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 
-def get_spotify_token():
+def get_spotify_token() -> Optional[str]:
 	auth_response = requests.post(
         'https://accounts.spotify.com/api/token',
         data={'grant_type': 'client_credentials'},
         auth=(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
     )
-	return auth_response.json().get("access_token")
-
+	token =  auth_response.json().get("access_token")
+	assert isinstance(token, str), "Spotify token missing or not a string"
+	return token
 
 @posts.route('/search_album')
-def search_album():
+def search_album() -> Response:
 	query = request.args.get("q", "").strip()
 	if not query:
-		return jsonify({"albums": {"items":[]}}) 
+		return cast(Response, jsonify({"albums": {"items":[]}}))
 	
 	token = get_spotify_token()   
 	limit = request.args.get("limit", 20)
@@ -35,11 +38,11 @@ def search_album():
         headers=headers
     )
     
-	return jsonify(res.json())
+	return cast(Response, jsonify(res.json()))
 
 @posts.route('/post/new', methods=['GET','POST'])
-@login_required
-def new_post():
+@login_required #type: ignore
+def new_post() -> Union[str, Response]:
 	form = PostForm()
 	if form.validate_on_submit():
 		post = Post(
@@ -61,13 +64,13 @@ def new_post():
 		legend='Create Post')
 
 @posts.route("/post/<int:post_id>")
-def post(post_id):
+def post(post_id: int) -> str:
 	post = Post.query.get_or_404(post_id)
 	return render_template('post.html', title=post.title, post=post)
 
 @posts.route("/post/<int:post_id>/update", methods=['GET','POST'])
-@login_required
-def update_post(post_id):
+@login_required #type: ignore
+def update_post(post_id: int) -> Union[str, Response]:
 	post = Post.query.get_or_404(post_id)
 	if post.author != current_user:
 		abort(403)
@@ -96,8 +99,8 @@ def update_post(post_id):
 		legend='Update Post')
 
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
-@login_required
-def delete_post(post_id):
+@login_required #type: ignore
+def delete_post(post_id: int) -> Response:
 	post = Post.query.get_or_404(post_id)
 	if post.author != current_user:
 		abort(403)
