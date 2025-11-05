@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4 text-center" style="color: #e8dcc8;">Album Ratings</h2>
+
+<div class="album-grid">
+    {% for album in albums %}
+        <div class="album-card rounded">
+            <img src="{{ album.image }}" alt="{{ album.name }}" class="album-card-image">
+            <div class="album-card-info">
+                <h5 class="album-card-name">{{ album.name }}</h5>
+                <p class="album-card-artist">{{ album.artist }}</p>
+                <div class="album-card-rating">
+                    {% set avg = album.average_rating or 0 %}
+                    {% for i in range(1, 6) %}
+                        {% if i <= avg|round(0, 'floor') %}
+                            <span class="star filled">★</span>
+                        {% else %}
+                            <span class="star empty">☆</span>
+                        {% endif %}
+                    {% endfor %}
+                    <span class="rating-number">{{ "%.2f"|format(avg) }}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Optional Pagination -->
+<div class="pagination mt-4 justify-content-center">
+    {% for page_num in albums.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if albums.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('posts.album_ratings', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('posts.album_ratings', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            <span class="pagination-ellipsis">...</span>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock content %}
