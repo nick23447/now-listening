@@ -5,7 +5,7 @@ from werkzeug.wrappers import Response
 from flask import render_template, url_for, flash, redirect, Blueprint, request, jsonify, abort
 from flask_login import login_required, current_user
 from musicblog import db
-from musicblog.models import Post, Album, AlbumRating
+from musicblog.models import Post, Album, AlbumRating, User
 from musicblog.posts.forms import PostForm
 from sqlalchemy import func
 
@@ -49,25 +49,11 @@ def search_album() -> Response:
 def new_post() -> Union[str, Response]:
 	form = PostForm()
 	if form.validate_on_submit():
-		post = Post(
-			title=form.title.data, 
-			content=form.content.data, 
-			rating=form.rating.data,
-			album_name=form.album_name.data, 
-			album_artist=form.album_artist.data,
-			album_image=form.album_image.data, 
-			author=current_user
-		)
 
 		album = Album.query.filter_by(
             name=form.album_name.data.strip(),
             artist=form.album_artist.data.strip()
         ).first()
-		
-		existing_rating = AlbumRating.query.filter_by(
-			user_id=current_user.id,
-			album_id=album.id
-		).first()
 		
 		if not album:
 			album = Album(
@@ -77,7 +63,12 @@ def new_post() -> Union[str, Response]:
             )
 			db.session.add(album)
 			db.session.flush()
-
+		
+		existing_rating = AlbumRating.query.filter_by(
+			user_id=current_user.id,
+			album_id=album.id
+		).first()
+		
 		if existing_rating:
 			existing_rating.rating = form.rating.data
 
@@ -88,6 +79,18 @@ def new_post() -> Union[str, Response]:
 				rating=form.rating.data
 			)
 			db.session.add(album_rating)
+
+		post = Post(
+			title=form.title.data, 
+			content=form.content.data, 
+			rating=form.rating.data,
+			album_name=form.album_name.data, 
+			album_artist=form.album_artist.data,
+			album_image=form.album_image.data, 
+			album_id=album.id,
+			author=current_user
+		)
+
 	
 		db.session.add(post)
 		db.session.commit()
@@ -183,3 +186,29 @@ def album_ratings() -> str:
         .paginate(page=page, per_page=12)
     )
     return render_template('album_ratings.html', title='Album Ratings', albums=albums_with_avg_ratings)
+
+
+@posts.route("/album/<int:album_id>")
+def album_detail(album_id: int) -> str:
+    album = Album.query.get_or_404(album_id)
+
+    posts = Post.query.filter_by(album_id=album.id).order_by(Post.date_posted.desc()).all()
+    ratings = (
+        db.session.query(User.username, AlbumRating.rating)
+        .join(User, User.id == AlbumRating.user_id)
+        .filter(AlbumRating.album_id == album.id)
+        .all()
+    )
+
+    avg_rating = album.avg_rating
+    rating_count = album.total_ratings
+
+    return render_template(
+        "album_detail.html",
+        title=f"{album.name} by {album.artist}",
+        album=album,
+        posts=posts,
+        ratings=ratings,
+        avg_rating=avg_rating,
+		rating_count=rating_count
+    )
