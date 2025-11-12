@@ -11,6 +11,12 @@ WORKDIR /app
 # ---- Copy dependencies first (for Docker caching) ----
 COPY requirements.txt .
 
+# ---- Install system dependencies ----
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # ---- Install Python packages ----
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
