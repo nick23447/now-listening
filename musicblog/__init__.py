@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from musicblog.config import Config
 from flask_migrate import Migrate
 from flask_mail import Mail
+import sqlalchemy as sa
 
 db: SQLAlchemy= SQLAlchemy()
 migrate: Migrate = Migrate()
@@ -32,6 +33,17 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     app.register_blueprint(posts)
     app.register_blueprint(main)
     app.register_blueprint(errors)
+
+    engine = sa.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    inspector = sa.inspect(engine)
+
+    if not inspector.has_table("users"):
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
+            app.logger.info('Initialized the database!')
+    else:
+        app.logger.info('Database already contains the users table.')
 
     return app
 
