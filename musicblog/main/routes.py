@@ -9,10 +9,6 @@ from flask_login import current_user
 
 main = Blueprint('main', __name__)
 
-@main.route('/init-db')
-def init_db():
-    db.create_all()
-    return "Database initialized!"
 
 @main.route('/')
 @main.route('/about')
