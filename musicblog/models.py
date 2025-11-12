@@ -17,7 +17,7 @@ def load_user(user_id: str) -> Optional['User']:
     return user
 
 class User(db.Model, UserMixin): # type: ignore
-    __table__name = 'user'
+    __tablename__ = 'user'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
