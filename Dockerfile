@@ -31,4 +31,4 @@ ENV FLASK_APP=run.py
 ENV FLASK_ENV=production
 
 # ---- Command to start app ----
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "run:app"]
+CMD flask db upgrade && gunicorn -b 0.0.0.0:8000 run:app
