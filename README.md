@@ -61,65 +61,8 @@ Now Listening is containerized using **Docker** and deployed via **Render**.
 
 
 
+<!-- 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#  Now Listening
-
-This project is a full-stack Flask web app that lets users share and rate albums, built with **Flask**, **SQLAlchemy**, **Bootstrap**, and fully containerized with **Docker** for easy deployment.
-
----
-
-## Features
-
-- Create posts and rate your favorite albums  
-- User authentication with Flask-Login  
-- Comment and interact with others’ reviews  
-- Album cover previews and profile pictures  
-- Dockerized for consistent development and deployment  
-- Deployed to **Render** with managed PostgreSQL  
-
----
 
 ## 🐳 Run Locally with Docker
 
@@ -169,4 +112,4 @@ This will install all dependencies and packages your Flask app into a Docker ima
 ```bash
 docker run -p 8000:8000 --env-file .env musicblog
 ```
-
+ -->
