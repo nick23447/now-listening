@@ -30,6 +30,7 @@ Users can search, read, and explore community posts to discover new music — al
 | **Deployment** | Docker + Render |
 | **Authentication** | Flask-Login & Flask-Bcrypt |
 | **Email / Reset** | Flask-Mail (optional for password reset) |
+| **Testing** | Pytest and Flask Fixtures
 
 ---
 
