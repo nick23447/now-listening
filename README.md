@@ -9,7 +9,7 @@ It’s built with **Flask**, **Bootstrap**, and **PostgreSQL**, and deployed usi
 
 ## **Overview**
 
-Now Listening provides a simple but elegant way for music lovers to:
+Now Listening provides a simple way for music lovers to:
 
 - ✏️ **Create posts** to share albums they’re currently listening to  
 - ⭐ **Rate albums** and view average ratings from other users  
@@ -25,7 +25,7 @@ Users can search, read, and explore community posts to discover new music — al
 | Layer | Technology |
 |-------|-------------|
 | **Backend** | Flask (Python), SQLAlchemy ORM |
-| **Frontend** | HTML, CSS, Bootstrap 5 |
+| **Frontend** | Jinja Templates, HTML, CSS, Bootstrap 5 |
 | **Database** | PostgreSQL (via SQLAlchemy) |
 | **Deployment** | Docker + Render |
 | **Authentication** | Flask-Login & Flask-Bcrypt |
@@ -53,12 +53,6 @@ Now Listening is containerized using **Docker** and deployed via **Render**.
 > If you’re an engineer interested in setup details, see the `Dockerfile` for reference.
 
 --- -->
-
-
-
-
-
-
 
 
 <!-- 
