@@ -48,12 +48,33 @@ def search_album() -> Response:
 @login_required #type: ignore
 def new_post() -> Union[str, Response]:
 	form = PostForm()
+	user_id = current_user.id
 	if form.validate_on_submit():
 
 		album = Album.query.filter_by(
             name=form.album_name.data.strip(),
             artist=form.album_artist.data.strip()
         ).first()
+
+		post = Post(
+			title=form.title.data, 
+			content=form.content.data, 
+			rating=form.rating.data,
+			album_name=form.album_name.data, 
+			album_artist=form.album_artist.data,
+			album_image=form.album_image.data, 
+			album_id=album.id,
+			author=current_user
+		)
+
+		all_user_posts = Post.query.filter_by(
+			user_id=user_id,
+			album_name=form.album_name,
+			album_artist=form.album_artist.data)
+		
+		if all_user_posts:
+			flash('You have already posted about this album!', 'warning')
+			return redirect(url_for('posts.new_post'))
 		
 		if not album:
 			album = Album(
@@ -79,18 +100,6 @@ def new_post() -> Union[str, Response]:
 				rating=form.rating.data
 			)
 			db.session.add(album_rating)
-
-		post = Post(
-			title=form.title.data, 
-			content=form.content.data, 
-			rating=form.rating.data,
-			album_name=form.album_name.data, 
-			album_artist=form.album_artist.data,
-			album_image=form.album_image.data, 
-			album_id=album.id,
-			author=current_user
-		)
-
 	
 		db.session.add(post)
 		db.session.commit()
