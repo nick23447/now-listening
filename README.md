@@ -31,7 +31,7 @@ Users can search, read, and explore community posts to discover new music — al
 | **Authentication** | Flask-Login & Flask-Bcrypt |
 | **Email / Reset** | Flask-Mail (optional for password reset) |
 | **Testing** | Pytest and Flask Fixtures
-| **Type Hinting** | Mypy
+| **Type Checking** | Mypy
 
 ---
 
