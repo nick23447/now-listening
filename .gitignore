@@ -37,3 +37,10 @@ htmlcov/
 # misc
 *.swp
 *~
+
+# SQL Lite 
+instance/
+site.db
+
+# Mypy
+.mypy_cache/
