@@ -159,15 +159,23 @@ def update_post(post_id: int) -> Union[str, Response]:
 @login_required #type: ignore
 def delete_post(post_id: int) -> Response:
 	post = Post.query.get_or_404(post_id)
+	user_id = current_user.id
 	if post.author != current_user:
 		abort(403)
 	
-	album = Album.query.filter_by(name=post.album_name).first()
-	album_rating = AlbumRating.query.filter_by(album_id=album.id).first()
+	all_albums = Post.query.filter_by(
+		album_name=post.album_name,
+		album_artist=post.album_artist
+	).all()
 
+	if all_albums and len(all_albums) == 1:
+		album = Album.query.filter_by(name=post.album_name, artist=post.album_artist).first()
+		album_rating = AlbumRating.query.filter_by(user_id=user_id, album_id=album.id).first()
+
+		db.session.delete(album)
+		db.session.delete(album_rating)
+	
 	db.session.delete(post)
-	db.session.delete(album)
-	db.session.delete(album_rating)
 	db.session.commit()
 	flash('Your post has been deleted!', 'success')
 	return redirect(url_for('main.home'))
