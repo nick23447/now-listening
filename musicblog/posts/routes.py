@@ -161,7 +161,13 @@ def delete_post(post_id: int) -> Response:
 	post = Post.query.get_or_404(post_id)
 	if post.author != current_user:
 		abort(403)
+	
+	album = Album.query.filter_by(name=post.album_name).first()
+	album_rating = AlbumRating.query.filter_by(album_id=album.id).first()
+
 	db.session.delete(post)
+	db.session.delete(album)
+	db.session.delete(album_rating)
 	db.session.commit()
 	flash('Your post has been deleted!', 'success')
 	return redirect(url_for('main.home'))
